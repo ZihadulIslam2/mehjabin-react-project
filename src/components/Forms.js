@@ -5,68 +5,158 @@ const Forms = () => {
     name: '',
     description: '',
     gender: '',
-    hobbes: [],
+    hobbies: [], // Fixed typo from "hobbes" to "hobbies"
     email: '',
     dateTime: '',
     range: '',
     password: '',
   })
 
+  // State to store submitted data for preview after submit
+  const [submittedData, setSubmittedData] = useState(null)
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    if (type === 'checkbox') {
+      setFormData((prev) => ({
+        ...prev,
+        hobbies: checked
+          ? [...prev.hobbies, value]
+          : prev.hobbies.filter((hobby) => hobby !== value),
+      }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setSubmittedData(formData) // Store form data to be previewed after submit
+  }
+
   return (
-    <div>
-      <h1 className="text-5xl">Forms Page:</h1>
+    <div className="mt-5">
+      <h1 className="text-5xl ">Form:</h1>
       <div className="flex justify-center items-center">
-        <form>
-          <label className="p-2 ">
-            Name: <input type="text" name="name" />
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name:{' '}
+            <input
+              className="m-5"
+              type="text"
+              name="name"
+              onChange={handleChange}
+            />
           </label>
           <br />
-          <label className="p-2">
-            Description: <textarea type="text" name="description" />
+          <label>
+            Description:{' '}
+            <textarea
+              className="m-5"
+              type="text"
+              name="description"
+              onChange={handleChange}
+            />
           </label>
           <br />
           <label>
             Gender:
-            <input type="radio" name="gender" value="male" />
+            <input
+              className="m-5"
+              type="radio"
+              name="gender"
+              value="male"
+              onChange={handleChange}
+            />
             Male
-            <input type="radio" name="gender" value="female" />
+            <input
+              className="m-5"
+              type="radio"
+              name="gender"
+              value="female"
+              onChange={handleChange}
+            />
             Female
           </label>
           <br />
           <label>
-            Hobbies :
-            <input type="checkbox" name="hobbies" /> Reading
-            <input type="checkbox" name="hobbies" /> Coding
+            Hobbies:
+            <input
+              className="m-5"
+              type="checkbox"
+              name="hobbies"
+              value="reading"
+              onChange={handleChange}
+            />{' '}
+            Reading
+            <input
+              className="m-5"
+              type="checkbox"
+              name="hobbies"
+              value="coding"
+              onChange={handleChange}
+            />{' '}
+            Coding
           </label>
-          <br />
           <br />
           <label htmlFor="">
             Email:
-            <input type="email" name="email" />
+            <input
+              className="m-5"
+              type="email"
+              name="email"
+              onChange={handleChange}
+            />
           </label>
           <br />
           <label htmlFor="">
             Date and time:
-            <input type="datetime-local" name="dateTime" />
+            <input
+              className="m-5"
+              type="datetime-local"
+              name="dateTime"
+              onChange={handleChange}
+            />
           </label>
           <br />
           <label>
             Range:
-            <input type="range" min="1" max="10" name="range" />
+            <input
+              className="m-5"
+              type="range"
+              min="1"
+              max="10"
+              name="range"
+              onChange={handleChange}
+            />
           </label>
           <br />
           <label htmlFor="">
             Password:
-            <input type="password" name="password" />
+            <input
+              className="m-5"
+              type="password"
+              name="password"
+              onChange={handleChange}
+            />
           </label>
           <br />
 
-          <button className="btn btn-secondary" type="submit">
-            submit
+          <button className="btn btn-secondary m-5" type="submit">
+            Submit
           </button>
         </form>
       </div>
+
+      {/* Conditionally render the preview only after form submission */}
+      {submittedData && (
+        <div className="mt-5">
+          <h3>Preview:</h3>
+          <pre>{JSON.stringify(submittedData, null, 2)}</pre>
+        </div>
+      )}
     </div>
   )
 }
+
 export default Forms
